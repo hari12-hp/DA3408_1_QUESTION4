@@ -22,6 +22,7 @@ DA3408_1_QUESTION4/
 ```
 
 ---
+partner B, manual for execution of the later part:
 
 ## Environment Setup
 
