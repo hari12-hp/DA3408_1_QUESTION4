@@ -3,8 +3,7 @@
 PARTNER A:
  for this question i used the UCI Human Activity Recognition (UCI-HAR) dataset. Dataset metadata is tracked by DVC, while the remote data is stored in Amazon S3.
 
-
-Project Structure
+Repo structure:
 
 DA3408_1_QUESTION4/
 ├── src/
