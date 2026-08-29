@@ -6,6 +6,7 @@ import numpy as np
 from pathlib import Path
 import subprocess
 import json
+from mlflow.tracking import MlflowClient
 
 #automatic tracking
 
@@ -35,7 +36,9 @@ x_test = np.loadtxt(data_dir/ "test" / "X_test.txt")
 y_test = np.loadtxt(data_dir/ "test" / "y_test.txt")
 
 #tracking in ML flow and training
-
+best_accuracy=-1
+best_model=None
+best_architecture=None
 import mlflow
 import mlflow.sklearn
 mlflow.set_tracking_uri("http://localhost:5000")
@@ -72,8 +75,11 @@ with mlflow.start_run(run_name='ARCHITECTURE') as parent:
                 
                 test_acc=accuracy_score(y_test,y_pred)
                 
-                for epoch,loss in enumerate(mlp.loss_curve_):
-                    mlflow.log_metric(f'training loss',loss,step=epoch)#plot
+                if test_acc>best_accuracy:
+                    best_accuracy=test_acc
+                    best_model=mlp
+                    best_architecture=arch
+                    
                 
                 mlflow.log_metric('train accuracy',train_acc)
                 
@@ -92,8 +98,18 @@ with mlflow.start_run(run_name='ARCHITECTURE') as parent:
 
                 mlflow.log_artifact(str(results_path))
 
-                mlflow.log_artifact("results.json")
-                mlflow.sklearn.log_model(sk_model=mlp,name='UCI-HAR CLASSIFIER',
-                                        serialization_format='cloudpickle')
+           
+        MODEL_NAME = "UCI-HAR-CLASSIFIER"
 
+        mlflow.sklearn.log_model(
+            sk_model=best_model,
+            name="UCI-HAR CLASSIFIER",
+            registered_model_name=MODEL_NAME,
+            serialization_format="cloudpickle"
+        )
 
+        client=MlflowClient()
+        latest_version=client.get_latest_versions(MODEL_NAME)[0].version
+        client.transition_model_version_stage(name=MODEL_NAME,version=latest_version,stage='Staging')
+
+        print(f'model {MODEL_NAME} ',f'version {latest_version} ','transition to staging is done' )
