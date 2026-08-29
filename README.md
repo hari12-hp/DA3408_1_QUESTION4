@@ -110,4 +110,4 @@ python src/train.py
 # PARTNER B
 
 
-**partner B, add  the results after independent reproduction.**
+**partner B, add  the results after independent run.**
