@@ -41,7 +41,8 @@ mamba activate aiops-q4
 | Architecture / Run | Training Accuracy | Test Accuracy |
 |---|---:|---:|
 | `(64, 32, 16)` | `0.99928` | `0.94062` |
-| Recorded Experiment | `0.99252` | `0.94096` |
+| `(50,25)` | `0.99252` | `0.94096` |
+|`(100,50)`|`0.99741`|`0.945707`|
 
 The results were tracked using **MLflow**.
 
