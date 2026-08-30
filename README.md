@@ -111,3 +111,25 @@ python src/train.py
 
 
 **partner B, add  the results after independent run.**
+
+csv file generated using
+```bash 
+python3 -c "
+import mlflow
+mlflow.set_tracking_uri('http://localhost:5000')
+df = mlflow.search_runs(experiment_names=['UCI-HAR-CLASSIFICATION'])
+df.to_csv('mlflow_uci_har_results.csv', index=False)
+print('Successfully saved MLflow results to mlflow_uci_har_results.csv')
+"
+```
+
+After running the train and test, Results obtained in the second run:
+
+| Architecture / Run | Training Accuracy | Test Accuracy |
+|---|---:|---:|
+| `(64, 32, 16)` | `0.999727965179543` | `0.9406175771971497` |
+| `(50,25)` | `0.9925190424374319` | `0.9409569053274517` |
+|`(100,50)`|`0.9974156692056583`|`0.9457074991516796`|
+
+
+This closely matches the first run.
